@@ -1,0 +1,46 @@
+---
+import "../styles/global.css";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Main">
+        <a class="brand" href="/">Collin D. Ching</a>
+        <div class="nav-links">
+          <a href="/writing">Writing</a>
+          <a href="/projects">Projects</a>
+          <a href="/experiments">Experiments</a>
+          <a href="/about">About</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        Built by hand with <a href="https://astro.build">Astro</a>. No
+        frameworks were harmed. <a href="/rss.xml">RSS</a>
+      </p>
+    </footer>
+  </body>
+</html>

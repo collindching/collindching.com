@@ -1,0 +1,55 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import { SITE_DESCRIPTION } from "../consts";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+---
+
+<Base description={SITE_DESCRIPTION}>
+  <h1>The build log of a data scientist becoming an agent engineer.</h1>
+  <p class="lede">
+    I'm Collin D. Ching. I have three goals — learn AI, build and ship with AI, and
+    learn marketing — and this site is the one vehicle for all of them. Every
+    week I learn something real, build it into this site, and write up what
+    happened.
+  </p>
+
+  <div class="section-head">
+    <h2>Latest writing</h2>
+    <a href="/writing">All posts →</a>
+  </div>
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li>
+          <a class="post-title" href={`/writing/${post.id}`}>
+            {post.data.title}
+          </a>
+          <p class="post-meta">{fmt(post.data.pubDate)}</p>
+          <p class="post-desc">{post.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="section-head">
+    <h2>Now building</h2>
+    <a href="/projects">All projects →</a>
+  </div>
+  <p>
+    <strong>This website.</strong> Hand-built with Astro, no site builder, no
+    framework bloat — because the build <em>is</em> the learning. Next up:
+    evaluating agent frameworks on a toy task and publishing the scorecard.
+  </p>
+  <p><a href="/about">More about me →</a></p>
+</Base>
