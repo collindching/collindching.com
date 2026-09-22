@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import { inspiration, type InspirationCategory } from "../data/inspiration";
+
+const filters: { id: InspirationCategory | "all"; label: string }[] = [
+  { id: "all", label: "Everything" },
+  { id: "design", label: "Design" },
+  { id: "content", label: "Content" },
+  { id: "marketing", label: "Marketing" },
+];
+
+const items = [...inspiration].sort((a, b) => b.added.localeCompare(a.added));
+
+const fmt = (d: string) =>
+  new Date(d + "T00:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+---
+
+<Base
+  title="Inspiration"
+  description="A curated collection of design, content, and marketing worth stealing from."
+>
+  <h1>Inspiration</h1>
+  <p class="lede">
+    My curation — design, writing, and marketing I think is cool, and what I'm
+    stealing from each. Good taste is just documented theft.
+  </p>
+
+  <div class="filter-bar" role="group" aria-label="Filter by category">
+    {
+      filters.map((f, i) => (
+        <button
+          class="filter-btn"
+          data-filter={f.id}
+          aria-pressed={i === 0 ? "true" : "false"}
+        >
+          {f.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="inspo-grid">
+    {
+      items.map((item) => (
+        <article class="inspo-card reveal" data-category={item.category}>
+          <div class="inspo-tags">
+            <span class="tag">{item.category}</span>
+            {item.example && <span class="tag tag-example">example</span>}
+          </div>
+          <h2 class="inspo-title">
+            <a href={item.url} target="_blank" rel="noopener">
+              {item.title}
+            </a>
+          </h2>
+          <p class="inspo-note">{item.note}</p>
+          <p class="inspo-meta">Saved {fmt(item.added)}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="inspo-foot">
+    This page reads from <code>src/data/inspiration.ts</code> — add an entry
+    there and it shows up here. No CMS, no database, just a typed array.
+  </p>
+
+  <script>
+    function setupFilters() {
+      const bar = document.querySelector(".filter-bar");
+      if (!bar || bar.hasAttribute("data-bound")) return;
+      bar.setAttribute("data-bound", "true");
+
+      const buttons = bar.querySelectorAll<HTMLButtonElement>(".filter-btn");
+      const cards = document.querySelectorAll<HTMLElement>(".inspo-card");
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.filter;
+          buttons.forEach((b) =>
+            b.setAttribute(
+              "aria-pressed",
+              b === btn ? "true" : "false",
+            ),
+          );
+          cards.forEach((card) => {
+            card.hidden =
+              filter !== "all" && card.dataset.category !== filter;
+          });
+        });
+      });
+    }
+
+    document.addEventListener("astro:page-load", setupFilters);
+    setupFilters();
+  </script>
+</Base>

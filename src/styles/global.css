@@ -280,3 +280,190 @@ a:hover {
   padding: 0.1em 0.7em;
   margin-right: var(--space-1);
 }
+
+/* ---- view transitions ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---- scroll-driven reveal ----
+   Progressive enhancement: content is fully visible by default, and only
+   animates in where the browser supports scroll-driven animations. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in 0.6s ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---- reading progress bar (essay pages) ----
+   Pure CSS: the bar fills as the document scrolls. Invisible where
+   scroll-driven animations aren't supported. */
+
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: 50;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .reading-progress {
+      animation: reading-progress linear both;
+      animation-timeline: scroll();
+    }
+  }
+}
+
+@keyframes reading-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---- nav active state ---- */
+
+.nav-links a.active {
+  color: var(--ink);
+}
+
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+
+/* ---- inspiration ---- */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+.filter-btn {
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.35em 1em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.filter-btn:hover {
+  color: var(--ink);
+  border-color: var(--faint);
+}
+
+.filter-btn[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.inspo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.inspo-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.inspo-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.25);
+}
+
+.inspo-tags {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.tag-example {
+  border-style: dashed;
+  color: var(--faint);
+}
+
+.inspo-title {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.inspo-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.inspo-title a:hover {
+  color: var(--accent);
+}
+
+.inspo-note {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin: 0;
+  flex: 1;
+}
+
+.inspo-meta {
+  color: var(--faint);
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.inspo-foot {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3);
+}
+
+.inspo-foot code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+}

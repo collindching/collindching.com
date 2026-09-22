@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -9,6 +10,17 @@ interface Props {
 
 const { title, description = SITE_DESCRIPTION } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+
+const path = Astro.url.pathname;
+const links = [
+  { href: "/writing", label: "Writing" },
+  { href: "/projects", label: "Projects" },
+  { href: "/inspiration", label: "Inspiration" },
+  { href: "/experiments", label: "Experiments" },
+  { href: "/about", label: "About" },
+];
+const isActive = (href: string) =>
+  path === href || path.startsWith(href + "/");
 ---
 
 <!doctype html>
@@ -20,16 +32,24 @@ const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
   </head>
   <body>
     <header class="site-header">
       <nav class="nav" aria-label="Main">
         <a class="brand" href="/">Collin D. Ching</a>
         <div class="nav-links">
-          <a href="/writing">Writing</a>
-          <a href="/projects">Projects</a>
-          <a href="/experiments">Experiments</a>
-          <a href="/about">About</a>
+          {
+            links.map((l) => (
+              <a
+                href={l.href}
+                class={isActive(l.href) ? "active" : undefined}
+                aria-current={isActive(l.href) ? "page" : undefined}
+              >
+                {l.label}
+              </a>
+            ))
+          }
         </div>
       </nav>
     </header>
