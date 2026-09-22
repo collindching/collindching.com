@@ -1,0 +1,413 @@
+---
+import Base from "../../layouts/Base.astro";
+---
+
+<Base
+  title="Market Map"
+  description="A live map of the U.S. stock market: momentum and overbought/oversold signals, sector rotation, and large-cap movers. Project #1 of the micro-tool studio."
+>
+  <div class="mm">
+    <p class="mm-kicker">Tools · Project #1</p>
+    <h1>Market Map</h1>
+    <p class="lede">
+      The U.S. stock market as an ecosystem: which sectors are leading,
+      which are stretched or washed out, and who&rsquo;s moving. Built to learn
+      how the market fits together.
+    </p>
+    <p class="mm-status" id="mm-status" aria-live="polite">
+      <span class="mm-dot mm-dot--loading"></span> Connecting to market data…
+    </p>
+
+    <section aria-labelledby="mm-h-momentum">
+      <h2 id="mm-h-momentum">Momentum check</h2>
+      <p class="mm-hint" id="mm-momentum-hint">RSI(14) per sector — overbought above 70, oversold below 30.</p>
+      <div class="mm-momentum" id="mm-momentum">
+        <div class="mm-skeleton mm-skeleton--rows" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="mm-h-rotation">
+      <h2 id="mm-h-rotation">Sector rotation</h2>
+      <p class="mm-hint">Which sectors are leading — and over what horizon.</p>
+      <div class="mm-tf" role="group" aria-label="Timeframe" id="mm-tf">
+        <button type="button" data-tf="1D" class="is-active" aria-pressed="true">1D</button>
+        <button type="button" data-tf="1W" aria-pressed="false">1W</button>
+        <button type="button" data-tf="1M" aria-pressed="false">1M</button>
+        <button type="button" data-tf="3M" aria-pressed="false">3M</button>
+        <button type="button" data-tf="1Y" aria-pressed="false">1Y</button>
+      </div>
+      <div class="mm-rotation" id="mm-rotation">
+        <div class="mm-skeleton mm-skeleton--rows" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="mm-h-movers">
+      <h2 id="mm-h-movers">Large-cap movers</h2>
+      <p class="mm-hint">Biggest single-day moves among U.S. stocks over $50B market cap.</p>
+      <div class="mm-movers">
+        <div class="mm-movers-col">
+          <h3>Gainers</h3>
+          <ol class="mm-mover-list" id="mm-gainers">
+            <div class="mm-skeleton mm-skeleton--rows" aria-hidden="true"></div>
+          </ol>
+        </div>
+        <div class="mm-movers-col">
+          <h3>Losers</h3>
+          <ol class="mm-mover-list" id="mm-losers">
+            <div class="mm-skeleton mm-skeleton--rows" aria-hidden="true"></div>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <p class="mm-footnote">
+      Quotes via TradingView (delayed, not for trading). Sector performance is
+      tracked via sector ETFs. This is a learning tool, not investment advice.
+    </p>
+  </div>
+
+  <script>
+    // ---------- tiny data layer: TradingView scanner (no key, CORS-open) ----------
+    const TV = "https://scanner.tradingview.com";
+    const F_SECTOR = ["name", "description", "close", "change", "Perf.W", "Perf.1M", "Perf.3M", "Perf.Y", "RSI", "SMA50"];
+
+    async function tvQuote(symbol, fields) {
+      const url = `${TV}/symbol?symbol=${encodeURIComponent(symbol)}&fields=${fields.join(",")}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const j = await res.json();
+      if (j && j.code) throw new Error(j.errmsg || "symbol not found");
+      return j;
+    }
+
+    async function tvScan(sortOrder) {
+      const res = await fetch(`${TV}/america/scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          symbols: { query: { types: ["stock"] }, tickers: [] },
+          columns: ["name", "description", "close", "change", "market_cap_basic"],
+          filter: [
+            { left: "market_cap_basic", operation: "greater", right: 50000000000 },
+            { left: "exchange", operation: "in_range", right: ["NYSE", "NASDAQ"] },
+          ],
+          sort: { sortBy: "change", sortOrder },
+          range: [0, 10],
+          options: { lang: "en" },
+        }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const j = await res.json();
+      return j.data || [];
+    }
+
+    // ---------- config ----------
+    // Sector weights ≈ S&P 500 GICS weights (normalized in code; updated Sep 2026).
+    const SECTORS = [
+      { name: "Technology", short: "Tech", etf: "AMEX:XLK", weight: 33.0, holdings: ["NASDAQ:AAPL", "NASDAQ:MSFT", "NASDAQ:NVDA", "NASDAQ:AVGO", "NYSE:CRM"] },
+      { name: "Financials", short: "Financials", etf: "AMEX:XLF", weight: 13.5, holdings: ["NYSE:BRK.B", "NYSE:JPM", "NYSE:V", "NYSE:MA", "NYSE:BAC"] },
+      { name: "Consumer Discretionary", short: "Discretionary", etf: "AMEX:XLY", weight: 10.5, holdings: ["NASDAQ:AMZN", "NASDAQ:TSLA", "NYSE:HD", "NYSE:MCD", "NYSE:NKE"] },
+      { name: "Health Care", short: "Health Care", etf: "AMEX:XLV", weight: 9.5, holdings: ["NYSE:LLY", "NYSE:UNH", "NYSE:JNJ", "NYSE:ABBV", "NYSE:MRK"] },
+      { name: "Communication Services", short: "Comm. Svcs", etf: "AMEX:XLC", weight: 9.5, holdings: ["NASDAQ:GOOGL", "NASDAQ:META", "NASDAQ:NFLX", "NYSE:DIS", "NASDAQ:TMUS"] },
+      { name: "Industrials", short: "Industrials", etf: "AMEX:XLI", weight: 8.0, holdings: ["NYSE:GE", "NYSE:CAT", "NYSE:HON", "NYSE:RTX", "NYSE:UNP"] },
+      { name: "Consumer Staples", short: "Staples", etf: "AMEX:XLP", weight: 5.5, holdings: ["NYSE:PG", "NYSE:WMT", "NYSE:KO", "NYSE:PEP", "NASDAQ:COST"] },
+      { name: "Energy", short: "Energy", etf: "AMEX:XLE", weight: 3.2, holdings: ["NYSE:XOM", "NYSE:CVX", "NYSE:COP", "NYSE:EOG", "NYSE:SLB"] },
+      { name: "Utilities", short: "Utilities", etf: "AMEX:XLU", weight: 2.5, holdings: ["NYSE:NEE", "NYSE:DUK", "NYSE:SO", "NYSE:D", "NYSE:AEP"] },
+      { name: "Real Estate", short: "Real Estate", etf: "AMEX:XLRE", weight: 2.1, holdings: ["NYSE:AMT", "NYSE:PLD", "NYSE:EQIX", "NYSE:PSA", "NYSE:WELL"] },
+      { name: "Materials", short: "Materials", etf: "AMEX:XLB", weight: 1.9, holdings: ["NYSE:LIN", "NYSE:SHW", "NYSE:APD", "NYSE:ECL", "NYSE:FCX"] },
+    ];
+
+    const TIMEFRAMES = [
+      { k: "1D", f: "change" },
+      { k: "1W", f: "Perf.W" },
+      { k: "1M", f: "Perf.1M" },
+      { k: "3M", f: "Perf.3M" },
+      { k: "1Y", f: "Perf.Y" },
+    ];
+
+    // ---------- helpers ----------
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const num = (v) => (v === null || v === undefined || Number.isNaN(+v) ? null : +v);
+    const fmtPct = (v) => { v = num(v); return v === null ? "—" : `${v >= 0 ? "+" : ""}${v.toFixed(2)}%`; };
+    const fmtPrice = (v, d = 2) => { v = num(v); return v === null ? "—" : v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+    const cls = (v, invert) => { v = num(v); if (v === null) return ""; const up = invert ? v < 0 : v > 0; return up ? "is-up" : v === 0 ? "" : "is-down"; };
+
+    function marketStatus() {
+      try {
+        const tz = "America/New_York";
+        const parts = new Intl.DateTimeFormat("en-US", { timeZone: tz, weekday: "short", hour: "numeric", minute: "numeric", hour12: false }).formatToParts(new Date());
+        const get = (t) => parts.find((p) => p.type === t)?.value;
+        const mins = (+get("hour")) * 60 + (+get("minute"));
+        const open = ["Mon", "Tue", "Wed", "Thu", "Fri"].includes(get("weekday")) && mins >= 570 && mins < 960;
+        const et = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" }).format(new Date());
+        return { open, et };
+      } catch { return { open: false, et: "" }; }
+    }
+
+    function errorBox(msg, retryId) {
+      return `<div class="mm-error" role="alert"><p>${esc(msg)}</p><button type="button" data-retry="${retryId}">Retry</button></div>`;
+    }
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-retry]");
+      if (b) loaders[b.dataset.retry]?.();
+    });
+
+    // ---------- state ----------
+    let sectorData = []; // [{...sector, quote}]
+
+    // ---------- section loaders ----------
+    const loaders = {};
+
+    loaders.sectors = async function () {
+      try {
+        const quotes = await Promise.all(SECTORS.map((s) => tvQuote(s.etf, F_SECTOR)));
+        sectorData = SECTORS.map((s, i) => ({ ...s, quote: quotes[i] }));
+        renderRotation();
+        renderMomentum();
+      } catch (err) {
+        const html = errorBox("Couldn’t load sector data. Check your connection and try again.", "sectors");
+        $("mm-rotation").innerHTML = html;
+        $("mm-momentum").innerHTML = `<p class="mm-muted">Momentum unavailable — sector data failed to load.</p>`;
+      }
+    };
+
+    loaders.movers = async function () {
+      try {
+        const [gainers, losers] = await Promise.all([tvScan("desc"), tvScan("asc")]);
+        renderMovers($("mm-gainers"), gainers, true);
+        renderMovers($("mm-losers"), losers, false);
+      } catch (err) {
+        const html = errorBox("Couldn’t load movers. Check your connection and try again.", "movers");
+        $("mm-gainers").innerHTML = html;
+        $("mm-losers").innerHTML = "";
+      }
+    };
+
+    // ---------- renderers ----------
+    function renderRotation(tf = currentTf) {
+      const el = $("mm-rotation");
+      const f = TIMEFRAMES.find((t) => t.k === tf).f;
+      const rows = sectorData
+        .map((d) => ({ d, v: num(d.quote[f]) }))
+        .filter((r) => r.v !== null)
+        .sort((a, b) => b.v - a.v);
+      if (!rows.length) { el.innerHTML = `<p class="mm-muted">No data for this timeframe.</p>`; return; }
+      const max = Math.max(...rows.map((r) => Math.abs(r.v)), 0.01);
+      el.innerHTML = rows.map(({ d, v }) => `
+        <div class="mm-row">
+          <span class="mm-row-name">${esc(d.short)}</span>
+          <span class="mm-row-bar"><span class="mm-row-fill ${v >= 0 ? "is-up" : "is-down"}"
+            style="${v >= 0 ? "left:50%" : "right:50%"};width:${(Math.abs(v) / max * 50).toFixed(1)}%"></span></span>
+          <span class="mm-row-val ${v >= 0 ? "is-up" : "is-down"}">${fmtPct(v)}</span>
+        </div>`).join("");
+    }
+
+    // ---------- momentum: RSI(14) overbought/oversold + stretch vs 50-day ----------
+    function rsiSignal(rsi) {
+      if (rsi === null) return { label: "—", cls: "" };
+      if (rsi >= 70) return { label: "Overbought", cls: "sig-hot" };
+      if (rsi >= 60) return { label: "Heating up", cls: "sig-warm" };
+      if (rsi <= 30) return { label: "Oversold", cls: "sig-cold" };
+      if (rsi <= 40) return { label: "Cooling off", cls: "sig-cool" };
+      return { label: "Neutral", cls: "sig-neutral" };
+    }
+
+    function renderMomentum() {
+      const el = $("mm-momentum");
+      const rows = sectorData
+        .map((d) => {
+          const rsi = num(d.quote.RSI);
+          const sma50 = num(d.quote.SMA50);
+          const close = num(d.quote.close);
+          const vsSma = (close !== null && sma50) ? ((close - sma50) / sma50) * 100 : null;
+          return { d, rsi, vsSma };
+        })
+        .filter((r) => r.rsi !== null)
+        .sort((a, b) => b.rsi - a.rsi);
+      if (!rows.length) { el.innerHTML = `<p class="mm-muted">No momentum data.</p>`; return; }
+      const hot = rows.filter((r) => r.rsi >= 70).length;
+      const cold = rows.filter((r) => r.rsi <= 30).length;
+      $("mm-momentum-hint").textContent =
+        `RSI(14) per sector ETF — overbought above 70, oversold below 30. Right now: ${hot} overbought, ${cold} oversold.`;
+      el.innerHTML = `<div class="mm-mom-head" aria-hidden="true">
+          <span>Sector</span><span>Momentum</span><span>RSI</span><span>vs 50-day</span><span>Signal</span>
+        </div>` + rows.map(({ d, rsi, vsSma }) => {
+        const sig = rsiSignal(rsi);
+        return `<div class="mm-mom-row">
+          <span class="mm-mom-name">${esc(d.short)}</span>
+          <span class="mm-mom-gauge" role="img" aria-label="${esc(d.name)} RSI ${rsi.toFixed(1)}">
+            <span class="mm-mom-zone mm-mom-zone--cold"></span>
+            <span class="mm-mom-zone mm-mom-zone--hot"></span>
+            <span class="mm-mom-marker" style="left:${Math.max(0, Math.min(100, rsi)).toFixed(1)}%"></span>
+          </span>
+          <span class="mm-mom-rsi">${rsi.toFixed(1)}</span>
+          <span class="mm-mom-vs ${cls(vsSma)}">${vsSma === null ? "—" : fmtPct(vsSma)}</span>
+          <span class="mm-mom-sig ${sig.cls}">${sig.label}</span>
+        </div>`;
+      }).join("");
+    }
+
+    function renderMovers(el, data, isGainers) {
+      el.innerHTML = data.map((r) => {
+        const [ticker, name, close, change] = r.d;
+        return `<li class="mm-mover">
+          <span class="mm-mover-sym">${esc(ticker)}</span>
+          <span class="mm-mover-name">${esc(name)}</span>
+          <span class="mm-mover-price">${fmtPrice(close)}</span>
+          <span class="mm-mover-chg ${isGainers ? "is-up" : "is-down"}">${fmtPct(change)}</span>
+        </li>`;
+      }).join("");
+    }
+
+    // ---------- sector detail ----------
+    let currentTf = "1D";
+    $("mm-tf").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-tf]");
+      if (!b) return;
+      currentTf = b.dataset.tf;
+      document.querySelectorAll("#mm-tf button").forEach((x) => {
+        const on = x === b;
+        x.classList.toggle("is-active", on);
+        x.setAttribute("aria-pressed", on);
+      });
+      renderRotation();
+    });
+
+    // ---------- status + boot ----------
+    (function status() {
+      const { open, et } = marketStatus();
+      $("mm-status").innerHTML = open
+        ? `<span class="mm-dot mm-dot--live"></span> Market open · delayed quotes · ${esc(et)} ET`
+        : `<span class="mm-dot"></span> Market closed · showing last close · ${esc(et)} ET`;
+    })();
+
+    loaders.sectors();
+    loaders.movers();
+  </script>
+</Base>
+
+<style is:global>
+  /* Market Map page — everything prefixed .mm- to avoid collisions. */
+  main { max-width: 76rem; }
+
+  .mm { padding-bottom: var(--space-4); }
+  .mm-kicker {
+    font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--faint); margin: var(--space-2) 0 0;
+  }
+  .mm h1 { margin-top: var(--space-1); }
+  .mm h2 { margin-top: var(--space-5); }
+  .mm h3 { font-size: 1.0625rem; margin: var(--space-3) 0 var(--space-2); }
+  .mm-hint { color: var(--muted); font-size: 0.9375rem; margin: -0.25rem 0 var(--space-3); }
+  .mm-muted { color: var(--muted); font-size: 0.875rem; }
+
+  .mm-status {
+    display: flex; align-items: center; gap: var(--space-2);
+    color: var(--muted); font-size: 0.9375rem; margin: var(--space-3) 0 0;
+  }
+  .mm-dot {
+    width: 0.6rem; height: 0.6rem; border-radius: 999px;
+    background: var(--faint); flex: none;
+  }
+  .mm-dot--live { background: #2e9e4f; animation: mm-pulse 1.6s ease-in-out infinite; }
+  .mm-dot--loading { background: var(--accent); animation: mm-pulse 1s ease-in-out infinite; }
+  @keyframes mm-pulse { 50% { opacity: 0.35; } }
+
+  /* momentum */
+  .mm-mom-head, .mm-mom-row {
+    display: grid; grid-template-columns: 7.5rem 1fr 3.25rem 4.75rem 7rem;
+    gap: var(--space-2); align-items: center;
+  }
+  .mm-mom-head {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--muted); padding-bottom: 0.35rem;
+  }
+  .mm-mom-head span:nth-child(3), .mm-mom-head span:nth-child(4) { text-align: right; }
+  .mm-mom-row { padding: 0.4rem 0; border-bottom: 1px solid var(--line); font-size: 0.9375rem; }
+  .mm-mom-row:last-child { border-bottom: none; }
+  .mm-mom-name { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mm-mom-gauge { position: relative; height: 0.6rem; background: var(--code-bg); border-radius: 999px; overflow: hidden; }
+  .mm-mom-zone { position: absolute; top: 0; bottom: 0; }
+  .mm-mom-zone--cold { left: 0; width: 30%; background: rgba(76, 195, 138, 0.35); }
+  .mm-mom-zone--hot { right: 0; width: 30%; background: rgba(200, 60, 58, 0.35); }
+  .mm-mom-marker {
+    position: absolute; top: -2px; bottom: -2px; width: 3px; border-radius: 2px;
+    background: var(--ink); transform: translateX(-50%);
+  }
+  .mm-mom-rsi { font-variant-numeric: tabular-nums; font-weight: 650; }
+  .mm-mom-vs { text-align: right; font-variant-numeric: tabular-nums; }
+  .mm-mom-sig {
+    font-size: 0.75rem; font-weight: 650; text-align: center; border-radius: 999px;
+    padding: 0.25em 0.5em; white-space: nowrap;
+  }
+  .sig-hot { background: rgba(200, 60, 58, 0.15); color: #c83c3a; }
+  .sig-warm { background: rgba(220, 140, 40, 0.16); color: #b97a1f; }
+  .sig-neutral { background: var(--code-bg); color: var(--muted); }
+  .sig-cool { background: rgba(70, 130, 200, 0.15); color: #3f7fc4; }
+  .sig-cold { background: rgba(46, 158, 79, 0.15); color: #2e9e4f; }
+  @media (prefers-color-scheme: dark) {
+    .sig-hot { color: #f0665f; }
+    .sig-warm { color: #e0a44a; }
+    .sig-cool { color: #6ea8e8; }
+    .sig-cold { color: #4cc38a; }
+  }
+
+  .is-up { color: #2e9e4f; } .is-down { color: #c83c3a; }
+  @media (prefers-color-scheme: dark) { .is-up { color: #4cc38a; } .is-down { color: #f0665f; } }
+
+  /* movers */
+  .mm-mover {
+    display: grid; grid-template-columns: 5.5rem 1fr auto auto; gap: var(--space-2);
+    align-items: baseline; padding: 0.45rem 0; border-bottom: 1px solid var(--line);
+    font-size: 0.9375rem;
+  }
+  .mm-mover:last-child { border-bottom: none; }
+  .mm-mover-sym { font-weight: 650; font-variant-numeric: tabular-nums; }
+  .mm-mover-name { color: var(--muted); font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mm-mover-price, .mm-mover-chg { font-variant-numeric: tabular-nums; text-align: right; }
+  .mm-mover-chg { font-weight: 600; min-width: 4.5rem; }
+
+  /* rotation */
+  .mm-tf { display: flex; gap: var(--space-1); margin-bottom: var(--space-3); flex-wrap: wrap; }
+  .mm-tf button {
+    border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px;
+    font: inherit; font-size: 0.875rem; padding: 0.3rem 0.9rem; cursor: pointer;
+  }
+  .mm-tf button:hover { color: var(--ink); border-color: var(--muted); }
+  .mm-tf button.is-active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .mm-row {
+    display: grid; grid-template-columns: 8rem 1fr 4.75rem; gap: var(--space-2);
+    align-items: center; padding: 0.3rem 0; font-size: 0.9375rem;
+  }
+  .mm-row-name { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mm-row-bar { position: relative; height: 1.35rem; background: var(--code-bg); border-radius: 4px; overflow: hidden; }
+  .mm-row-fill { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+  .mm-row-fill.is-up { background: #2e9e4f; } .mm-row-fill.is-down { background: #c83c3a; }
+  .mm-row-val { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* movers */
+  .mm-movers { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+  .mm-mover-list { list-style: none; margin: 0; padding: 0; }
+
+  /* skeletons + errors */
+  .mm-skeleton { border-radius: 8px; background: linear-gradient(90deg, var(--code-bg) 25%, var(--line) 50%, var(--code-bg) 75%); background-size: 200% 100%; animation: mm-shimmer 1.2s linear infinite; }
+  @keyframes mm-shimmer { to { background-position: -200% 0; } }
+  .mm-skeleton--rows { height: 12rem; }
+  .mm-error { border: 1px dashed var(--line); border-radius: 10px; padding: var(--space-3); color: var(--muted); }
+  .mm-error button {
+    border: 1px solid var(--line); background: none; color: var(--ink); border-radius: 8px;
+    font: inherit; font-size: 0.875rem; padding: 0.35rem 1rem; cursor: pointer; margin-top: var(--space-1);
+  }
+  .mm-error button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .mm-footnote { color: var(--faint); font-size: 0.8125rem; margin-top: var(--space-5); }
+
+  @media (max-width: 56rem) {
+    .mm-movers { grid-template-columns: 1fr; }
+    .mm-row { grid-template-columns: 6.5rem 1fr 4.25rem; }
+    .mm-mom-head, .mm-mom-row { grid-template-columns: 5.5rem 1fr 2.75rem 5.5rem; }
+    .mm-mom-head span:nth-child(4), .mm-mom-row .mm-mom-vs { display: none; }
+    .mm-mom-sig { font-size: 0.6875rem; }
+  }
+</style>
