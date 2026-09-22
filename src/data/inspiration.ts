@@ -44,4 +44,25 @@ export const inspiration: InspirationItem[] = [
     added: "2026-09-22",
     example: true,
   },
+  {
+    title: "The Brain Lab Co.",
+    url: "https://www.instagram.com/thebrainlabco/",
+    category: "content",
+    note: "Neuroscience translated into content people actually want — explaining the brain to make life less scary. The model for teaching anything technical.",
+    added: "2026-09-22",
+  },
+  {
+    title: "2511 Studio",
+    url: "https://www.instagram.com/2511.studio/",
+    category: "design",
+    note: "Animation in service of the story — motion that explains instead of decorates. The takeaway: I can teach and tell stories with animation, building visuals I'd never be able to film otherwise.",
+    added: "2026-09-22",
+  },
+  {
+    title: "brainrotco",
+    url: "https://www.instagram.com/brainrotco/",
+    category: "content",
+    note: "Interesting, but the animations are wallpaper — they don't match what's being said. The higher bar: animations and diagrams that actually illustrate the content in question.",
+    added: "2026-09-22",
+  },
 ];
