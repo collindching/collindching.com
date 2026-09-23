@@ -43,21 +43,24 @@ const fmt = (d: string) =>
     }
   </div>
 
-  <div class="inspo-grid">
+  <div class="inspo-list">
     {
-      items.map((item) => (
-        <article class="inspo-card reveal" data-category={item.category}>
-          <div class="inspo-tags">
-            <span class="tag">{item.category}</span>
-            {item.example && <span class="tag tag-example">example</span>}
-          </div>
+      items.map((item, i) => (
+        <article class="inspo-entry reveal" data-category={item.category}>
+          <p class="inspo-kicker">
+            <span class="inspo-index">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="inspo-cat">{item.category}</span>
+            <span aria-hidden="true">·</span>
+            <span>Saved {fmt(item.added)}</span>
+          </p>
           <h2 class="inspo-title">
             <a href={item.url} target="_blank" rel="noopener">
               {item.title}
             </a>
           </h2>
           <p class="inspo-note">{item.note}</p>
-          <p class="inspo-meta">Saved {fmt(item.added)}</p>
         </article>
       ))
     }
@@ -75,7 +78,7 @@ const fmt = (d: string) =>
       bar.setAttribute("data-bound", "true");
 
       const buttons = bar.querySelectorAll<HTMLButtonElement>(".filter-btn");
-      const cards = document.querySelectorAll<HTMLElement>(".inspo-card");
+      const entries = document.querySelectorAll<HTMLElement>(".inspo-entry");
 
       buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -86,9 +89,9 @@ const fmt = (d: string) =>
               b === btn ? "true" : "false",
             ),
           );
-          cards.forEach((card) => {
-            card.hidden =
-              filter !== "all" && card.dataset.category !== filter;
+          entries.forEach((entry) => {
+            entry.hidden =
+              filter !== "all" && entry.dataset.category !== filter;
           });
         });
       });

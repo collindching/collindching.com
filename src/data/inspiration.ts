@@ -21,30 +21,6 @@ export interface InspirationItem {
 
 export const inspiration: InspirationItem[] = [
   {
-    title: "Linear",
-    url: "https://linear.app",
-    category: "design",
-    note: "A B2B product site that feels like a designed object — dark, precise, and every animation earns its place. The bar for 'tool that looks inevitable'.",
-    added: "2026-09-22",
-    example: true,
-  },
-  {
-    title: "Karpathy's blog",
-    url: "https://karpathy.github.io",
-    category: "content",
-    note: "Explains genuinely hard ideas in plain language with zero fluff. Proof that clarity is the whole game in technical writing.",
-    added: "2026-09-22",
-    example: true,
-  },
-  {
-    title: "Liquid Death",
-    url: "https://liquiddeath.com",
-    category: "marketing",
-    note: "Selling canned water like a punk band. The canonical example that the story is the product — and that a commodity can have a personality.",
-    added: "2026-09-22",
-    example: true,
-  },
-  {
     title: "The Brain Lab Co.",
     url: "https://www.instagram.com/thebrainlabco/",
     category: "content",
