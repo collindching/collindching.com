@@ -1,10 +1,10 @@
 ---
-// Hand-built diagram per inspiration entry. Each one distills *why* the
-// entry is inspiring — the model, not decoration.
+// Hand-built diagram per inspiration entry, in the vein of The Brain Lab Co:
+// metaphor-first, contrast-driven, annotated — not boxes-and-arrows.
 //
-// Visual language: hairline ink strokes, small-caps sans labels,
-// Georgia italic for the "voice" lines, one brown accent moment each.
-// SVG colors use CSS vars so dark mode adapts.
+// Anti-AI-tell rules: nothing centered-and-even, labels annotate instead of
+// titling, color encodes meaning (brown = the human intervention,
+// faint = raw noise), every mark earns its place.
 interface Props {
   id: string;
 }
@@ -13,90 +13,76 @@ const SERIF = "Georgia, 'Times New Roman', serif";
 ---
 
 {id === "brain-lab" && (
-  <svg viewBox="0 0 384 150" role="img" aria-label="Diagram: dense topic translated for humans so people get it">
+  <svg viewBox="0 0 380 190" role="img" aria-label="Diagram: a dense paper contrasted with its one-sentence translation">
     <defs>
       <marker id="arr-brown" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
       </marker>
     </defs>
 
-    <line x1="24" y1="122" x2="360" y2="122" stroke="var(--faint)" stroke-width="1" stroke-dasharray="2 5" stroke-linecap="round" opacity="0.7" />
+    <text x="20" y="28" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">AS PUBLISHED</text>
+    <g fill="var(--faint)" opacity="0.42">
+      <rect x="20" y="44" width="150" height="10" rx="5" />
+      <rect x="20" y="62" width="168" height="10" rx="5" />
+      <rect x="20" y="80" width="132" height="10" rx="5" />
+      <rect x="20" y="98" width="160" height="10" rx="5" />
+      <rect x="20" y="116" width="118" height="10" rx="5" />
+      <rect x="20" y="134" width="96" height="10" rx="5" />
+    </g>
+    <text x="20" y="168" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">12 pages · 40 citations</text>
 
-    <text x="48" y="30" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">INPUT</text>
-    <rect x="4" y="44" width="88" height="58" rx="11" fill="none" stroke="var(--faint)" stroke-width="1.5" />
-    <text x="48" y="68" text-anchor="middle" font-size="12.5" fill="var(--muted)">Dense</text>
-    <text x="48" y="85" text-anchor="middle" font-size="12.5" fill="var(--muted)">topic</text>
+    <line x1="196" y1="96" x2="228" y2="96" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr-brown)" />
 
-    <line x1="100" y1="73" x2="142" y2="73" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr-brown)" />
-    <text x="121" y="60" text-anchor="middle" font-size="11.5" font-style="italic" font-family={SERIF} fill="var(--accent)">simplify</text>
-
-    <text x="194" y="30" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--accent)">THE WORK</text>
-    <rect x="150" y="44" width="88" height="58" rx="11" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" />
-    <text x="194" y="68" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Translate</text>
-    <text x="194" y="85" text-anchor="middle" font-size="12.5" fill="var(--ink)">for humans</text>
-
-    <line x1="246" y1="73" x2="288" y2="73" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr-brown)" />
-    <text x="267" y="60" text-anchor="middle" font-size="11" font-style="italic" font-family={SERIF} fill="var(--accent)">humanize</text>
-
-    <text x="340" y="30" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">OUTCOME</text>
-    <rect x="296" y="44" width="88" height="58" rx="11" fill="none" stroke="var(--faint)" stroke-width="1.5" />
-    <text x="340" y="68" text-anchor="middle" font-size="12.5" fill="var(--muted)">People</text>
-    <text x="340" y="85" text-anchor="middle" font-size="12.5" fill="var(--muted)">get it</text>
+    <text x="248" y="28" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">AS UNDERSTOOD</text>
+    <text x="248" y="88" font-size="15" font-style="italic" font-family={SERIF} fill="var(--ink)">Unfinished tasks</text>
+    <text x="248" y="110" font-size="15" font-style="italic" font-family={SERIF} fill="var(--ink)">stay active in your mind.</text>
+    <text x="248" y="140" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">one sentence.</text>
   </svg>
 )}
 
 {id === "studio-2511" && (
-  <svg viewBox="0 0 380 190" role="img" aria-label="Diagram: motion as decoration versus motion as explanation">
+  <svg viewBox="0 0 380 210" role="img" aria-label="Diagram: one shape with two motion paths — a scribble going nowhere and a purposeful arrow">
     <defs>
       <marker id="arr-brown-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
       </marker>
     </defs>
 
-    <text x="95" y="28" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">DECORATION</text>
-    <rect x="75" y="66" width="40" height="40" fill="none" stroke="var(--ink)" stroke-width="1.5" />
-    <g stroke="var(--faint)" stroke-width="1.5" stroke-linecap="round" fill="none">
-      <line x1="52" y1="60" x2="42" y2="50" />
-      <line x1="138" y1="70" x2="150" y2="62" opacity="0.6" />
-      <line x1="57" y1="120" x2="48" y2="130" opacity="0.6" />
-      <line x1="136" y1="118" x2="148" y2="126" />
-      <line x1="95" y1="46" x2="95" y2="36" opacity="0.5" />
-      <circle cx="146" cy="100" r="3" />
-      <circle cx="46" cy="92" r="3" opacity="0.6" />
-    </g>
-    <text x="95" y="152" text-anchor="middle" font-size="13" font-style="italic" font-family={SERIF} fill="var(--faint)">moves, says nothing</text>
+    <text x="190" y="28" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">TWO KINDS OF MOTION</text>
 
-    <line x1="190" y1="20" x2="190" y2="164" stroke="var(--line)" stroke-width="1" stroke-dasharray="2 5" />
+    <circle cx="60" cy="105" r="14" fill="none" stroke="var(--ink)" stroke-width="1.5" />
 
-    <rect x="212" y="40" width="148" height="108" rx="16" fill="var(--accent-soft)" />
-    <text x="285" y="28" text-anchor="middle" font-size="9.5" letter-spacing="0.14em" fill="var(--accent)">EXPLANATION</text>
-    <circle cx="246" cy="90" r="13" fill="none" stroke="var(--ink)" stroke-width="1.5" />
-    <path d="M264,90 C280,90 288,90 302,90" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arr-brown-2)" />
-    <rect x="308" y="76" width="28" height="28" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <path d="M76,108 C100,70 120,140 150,110 S190,80 210,115 S250,140 268,118"
+      fill="none" stroke="var(--faint)" stroke-width="1.25" stroke-linecap="round" />
+    <circle cx="268" cy="118" r="2" fill="var(--faint)" opacity="0.6" />
+    <text x="148" y="188" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--faint)">moves, says nothing</text>
+
+    <path d="M76,102 C140,100 180,60 240,62 C270,63 288,80 300,92"
+      fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" marker-end="url(#arr-brown-2)" />
+    <rect x="302" y="88" width="28" height="28" fill="none" stroke="var(--ink)" stroke-width="1.5" />
     <circle r="4" fill="var(--accent)">
-      <animateMotion dur="2.6s" repeatCount="indefinite" path="M264,90 C280,90 288,90 302,90" />
+      <animateMotion dur="2.8s" repeatCount="indefinite" path="M76,102 C140,100 180,60 240,62 C270,63 288,80 300,92" />
     </circle>
-    <text x="285" y="152" text-anchor="middle" font-size="13" font-style="italic" font-family={SERIF} fill="var(--muted)">moves, means something</text>
+    <text x="255" y="46" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--muted)">moves, means something</text>
   </svg>
 )}
 
 {id === "brainrotco" && (
-  <svg viewBox="0 0 380 186" role="img" aria-label="Diagram: what is said does not match what is shown">
-    <text x="20" y="26" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">WHAT'S SAID</text>
-    <rect x="20" y="38" width="204" height="38" rx="19" fill="none" stroke="var(--ink)" stroke-width="1.5" />
-    <text x="122" y="62" text-anchor="middle" font-size="13.5" font-style="italic" font-family={SERIF} fill="var(--muted)">the actual idea</text>
+  <svg viewBox="0 0 380 220" role="img" aria-label="Diagram: a screen where the words said and the shapes shown never connect">
+    <rect x="40" y="20" width="300" height="180" rx="14" fill="none" stroke="var(--faint)" stroke-width="1.5" />
 
-    <text x="20" y="108" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">WHAT'S SHOWN</text>
+    <text x="62" y="50" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">WHAT'S SAID</text>
+    <text x="62" y="76" font-size="14" font-style="italic" font-family={SERIF} fill="var(--muted)">“dopamine reinforces the habit loop…”</text>
+
+    <text x="190" y="124" text-anchor="middle" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">(nothing connects these)</text>
+
+    <text x="62" y="150" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">WHAT'S SHOWN</text>
     <g fill="none" stroke="var(--faint)" stroke-width="1.5">
-      <circle cx="34" cy="140" r="9" />
-      <rect x="62" y="131" width="18" height="18" opacity="0.7" />
-      <path d="M96,149 L106,131 L116,149 Z" opacity="0.55" />
-      <path d="M132,140 q6,-9 12,0 t12,0" stroke-linecap="round" opacity="0.7" />
-      <path d="M182,131 l2.6,6.4 6.4,2.6 -6.4,2.6 -2.6,6.4 -2.6,-6.4 -6.4,-2.6 6.4,-2.6 Z" opacity="0.5" />
+      <circle cx="78" cy="172" r="9" />
+      <rect x="106" y="163" width="18" height="18" opacity="0.7" />
+      <path d="M140,181 L150,163 L160,181 Z" opacity="0.55" />
+      <path d="M176,172 q6,-9 12,0 t12,0" stroke-linecap="round" opacity="0.7" />
+      <path d="M226,163 l2.6,6.4 6.4,2.6 -6.4,2.6 -2.6,6.4 -2.6,-6.4 -6.4,-2.6 6.4,-2.6 Z" opacity="0.5" />
     </g>
-
-    <circle cx="322" cy="92" r="25" fill="none" stroke="var(--accent)" stroke-width="1.5" />
-    <text x="322" y="103" text-anchor="middle" font-size="30" fill="var(--accent)">≠</text>
-    <text x="322" y="160" text-anchor="middle" font-size="12" font-style="italic" font-family={SERIF} fill="var(--faint)">no relation</text>
   </svg>
 )}
