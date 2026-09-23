@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import { readingList } from "../data/reading";
+
+const items = [...readingList].sort((a, b) => b.added.localeCompare(a.added));
+---
+
+<Base
+  title="Reading"
+  description="What I'm reading — the canon behind the build logs."
+>
+  <h1>Reading</h1>
+  <p class="lede">
+    The material behind the build logs. What I'm reading, and what's worth
+    your time.
+  </p>
+  <ul class="post-list">
+    {
+      items.map((item) => (
+        <li class="reveal">
+          <a class="post-title" href={item.url}>
+            {item.title}
+          </a>
+          <p class="post-meta">
+            {item.author} · {item.kind} · added {item.added}
+          </p>
+          <p class="post-desc">{item.note}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
