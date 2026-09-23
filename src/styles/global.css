@@ -410,10 +410,6 @@ a:hover {
   color: var(--faint);
 }
 
-.inspo-index {
-  color: var(--faint);
-}
-
 .inspo-cat {
   color: var(--accent);
 }
@@ -443,26 +439,12 @@ a:hover {
   max-width: 38rem;
 }
 
-.inspo-body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-3);
-  align-items: center;
-  margin-top: var(--space-2);
-}
-
-@media (min-width: 48rem) {
-  .inspo-body {
-    grid-template-columns: minmax(0, 1fr) 19rem;
-    gap: var(--space-5);
-  }
-}
-
 .inspo-diagram {
-  margin: 0;
+  margin: var(--space-3) 0;
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: var(--space-3) var(--space-3) var(--space-2);
+  padding: var(--space-4);
+  max-width: 36rem;
   background: color-mix(in srgb, var(--bg) 60%, var(--code-bg));
 }
 

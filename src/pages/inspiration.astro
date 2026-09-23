@@ -46,12 +46,9 @@ const fmt = (d: string) =>
 
   <div class="inspo-list">
     {
-      items.map((item, i) => (
+      items.map((item) => (
         <article class="inspo-entry reveal" data-category={item.category}>
           <p class="inspo-kicker">
-            <span class="inspo-index">
-              {String(i + 1).padStart(2, "0")}
-            </span>
             <span class="inspo-cat">{item.category}</span>
             <span aria-hidden="true">·</span>
             <span>Saved {fmt(item.added)}</span>
@@ -61,17 +58,15 @@ const fmt = (d: string) =>
               {item.title}
             </a>
           </h2>
-          <div class="inspo-body">
-            <p class="inspo-note">{item.note}</p>
-            {item.diagramId && (
-              <figure class="inspo-diagram">
-                <InspirationDiagram id={item.diagramId} />
-                {item.diagramCaption && (
-                  <figcaption>{item.diagramCaption}</figcaption>
-                )}
-              </figure>
-            )}
-          </div>
+          {item.diagramId && (
+            <figure class="inspo-diagram">
+              <InspirationDiagram id={item.diagramId} />
+              {item.diagramCaption && (
+                <figcaption>{item.diagramCaption}</figcaption>
+              )}
+            </figure>
+          )}
+          <p class="inspo-note">{item.note}</p>
         </article>
       ))
     }
