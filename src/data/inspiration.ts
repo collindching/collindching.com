@@ -44,9 +44,9 @@ export const inspiration: InspirationItem[] = [
     title: "brainrotco",
     url: "https://www.instagram.com/brainrotco/",
     category: "content",
-    note: "Interesting, but the animations are wallpaper — they don't match what's being said. The higher bar: animations and diagrams that actually illustrate the content in question.",
+    note: "Motion is a spotlight: it captures attention automatically, whether or not it means anything. brainrotco's animations are wallpaper — movement that grabs the eye but illustrates nothing. The higher bar: point the spotlight at the idea itself.",
     added: "2026-09-22",
     diagramId: "brainrotco",
-    diagramCaption: "The mismatch",
+    diagramCaption: "Movement is a spotlight",
   },
 ];
