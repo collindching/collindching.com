@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import InspirationDiagram from "../components/InspirationDiagram.astro";
 import { inspiration, type InspirationCategory } from "../data/inspiration";
 
 const filters: { id: InspirationCategory | "all"; label: string }[] = [
@@ -60,7 +61,17 @@ const fmt = (d: string) =>
               {item.title}
             </a>
           </h2>
-          <p class="inspo-note">{item.note}</p>
+          <div class="inspo-body">
+            <p class="inspo-note">{item.note}</p>
+            {item.diagramId && (
+              <figure class="inspo-diagram">
+                <InspirationDiagram id={item.diagramId} />
+                {item.diagramCaption && (
+                  <figcaption>{item.diagramCaption}</figcaption>
+                )}
+              </figure>
+            )}
+          </div>
         </article>
       ))
     }

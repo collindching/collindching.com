@@ -1,0 +1,88 @@
+---
+// Hand-built diagram per inspiration entry. Each one distills *why* the
+// entry is inspiring — the model, not decoration.
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+{id === "brain-lab" && (
+  <svg viewBox="0 0 340 150" role="img" aria-label="Diagram: dense topic translated for humans so people get it">
+    <defs>
+      <marker id="arr-brown" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
+      </marker>
+    </defs>
+    <rect x="4" y="49" width="88" height="52" rx="10" fill="none" stroke="var(--faint)" stroke-width="1.5" />
+    <text x="48" y="71" text-anchor="middle" font-size="12" fill="var(--muted)">Dense</text>
+    <text x="48" y="87" text-anchor="middle" font-size="12" fill="var(--muted)">topic</text>
+
+    <line x1="100" y1="75" x2="124" y2="75" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr-brown)" />
+    <text x="112" y="64" text-anchor="middle" font-size="10" fill="var(--accent)">simplify</text>
+
+    <rect x="132" y="49" width="88" height="52" rx="10" fill="none" stroke="var(--accent)" stroke-width="2" />
+    <text x="176" y="71" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Translate</text>
+    <text x="176" y="87" text-anchor="middle" font-size="12" fill="var(--ink)">for humans</text>
+
+    <line x1="228" y1="75" x2="252" y2="75" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#arr-brown)" />
+    <text x="240" y="64" text-anchor="middle" font-size="10" fill="var(--accent)">humanize</text>
+
+    <rect x="260" y="49" width="76" height="52" rx="10" fill="none" stroke="var(--faint)" stroke-width="1.5" />
+    <text x="298" y="71" text-anchor="middle" font-size="12" fill="var(--muted)">People</text>
+    <text x="298" y="87" text-anchor="middle" font-size="12" fill="var(--muted)">get it</text>
+  </svg>
+)}
+
+{id === "studio-2511" && (
+  <svg viewBox="0 0 340 170" role="img" aria-label="Diagram: motion as decoration versus motion as explanation">
+    <defs>
+      <marker id="arr-brown-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
+      </marker>
+    </defs>
+
+    <text x="85" y="24" text-anchor="middle" font-size="10" letter-spacing="0.12em" fill="var(--faint)">DECORATION</text>
+    <rect x="65" y="62" width="40" height="40" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <g stroke="var(--faint)" stroke-width="1.5" stroke-linecap="round">
+      <line x1="50" y1="58" x2="40" y2="48" />
+      <line x1="120" y1="68" x2="132" y2="60" />
+      <line x1="55" y1="118" x2="46" y2="128" />
+      <line x1="118" y1="116" x2="130" y2="124" />
+      <line x1="96" y1="44" x2="96" y2="34" />
+    </g>
+    <circle cx="128" cy="98" r="3" fill="none" stroke="var(--faint)" stroke-width="1.5" />
+    <circle cx="44" cy="90" r="3" fill="none" stroke="var(--faint)" stroke-width="1.5" />
+    <text x="85" y="152" text-anchor="middle" font-size="11" font-style="italic" fill="var(--faint)">moves, says nothing</text>
+
+    <line x1="170" y1="16" x2="170" y2="158" stroke="var(--line)" stroke-width="1" />
+
+    <text x="255" y="24" text-anchor="middle" font-size="10" letter-spacing="0.12em" fill="var(--accent)">EXPLANATION</text>
+    <circle cx="218" cy="90" r="13" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <path d="M236,90 C250,90 256,90 272,90" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arr-brown-2)" />
+    <rect x="278" y="76" width="28" height="28" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <text x="255" y="152" text-anchor="middle" font-size="11" font-style="italic" fill="var(--muted)">moves, means something</text>
+  </svg>
+)}
+
+{id === "brainrotco" && (
+  <svg viewBox="0 0 340 170" role="img" aria-label="Diagram: what is said does not match what is shown">
+    <text x="16" y="28" font-size="10" letter-spacing="0.12em" fill="var(--faint)">WHAT'S SAID</text>
+    <rect x="16" y="40" width="190" height="36" rx="18" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <text x="111" y="63" text-anchor="middle" font-size="12" fill="var(--muted)">the actual idea</text>
+
+    <text x="16" y="104" font-size="10" letter-spacing="0.12em" fill="var(--faint)">WHAT'S SHOWN</text>
+    <g fill="none" stroke="var(--faint)" stroke-width="1.5">
+      <circle cx="30" cy="130" r="10" />
+      <rect x="58" y="120" width="20" height="20" />
+      <path d="M96,140 L108,120 L120,140 Z" />
+      <path d="M136,130 q6,-10 12,0 t12,0" stroke-linecap="round" />
+      <path d="M188,120 l3,7 7,3 -7,3 -3,7 -3,-7 -7,-3 7,-3 Z" />
+    </g>
+
+    <circle cx="290" cy="88" r="24" fill="none" stroke="var(--accent)" stroke-width="1.5" />
+    <text x="290" y="99" text-anchor="middle" font-size="28" fill="var(--accent)">≠</text>
+
+    <text x="16" y="162" font-size="11" font-style="italic" fill="var(--faint)">wallpaper motion</text>
+  </svg>
+)}
