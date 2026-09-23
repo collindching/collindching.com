@@ -84,14 +84,19 @@ const SERIF = "Georgia, 'Times New Roman', serif";
       <rect x="300" y="162" width="15" height="15" />
     </g>
 
-    <g fill="none" stroke="var(--accent)" stroke-linecap="round">
-      <path d="M194,94 q-26,24 0,48" stroke-width="1.5" opacity="0.35" />
-      <path d="M204,100 q-20,18 0,36" stroke-width="1.5" opacity="0.55" />
-      <path d="M214,106 q-14,12 0,24" stroke-width="1.5" opacity="0.8" />
+    <g>
+      <animateTransform attributeName="transform" type="translate"
+        values="0 0; -5 1; 5 -1; 0 0; 0 0" keyTimes="0; 0.08; 0.16; 0.28; 1"
+        dur="2.6s" repeatCount="indefinite" />
+      <g fill="none" stroke="var(--accent)" stroke-linecap="round">
+        <path d="M194,94 q-26,24 0,48" stroke-width="1.5" opacity="0.35" />
+        <path d="M204,100 q-20,18 0,36" stroke-width="1.5" opacity="0.55" />
+        <path d="M214,106 q-14,12 0,24" stroke-width="1.5" opacity="0.8" />
+      </g>
+      <circle cx="240" cy="118" r="11" fill="none" stroke="var(--accent)" stroke-width="2.25" />
     </g>
-    <circle cx="240" cy="118" r="11" fill="none" stroke="var(--accent)" stroke-width="2.25" />
 
-    <text x="52" y="206" font-size="13" font-style="italic" font-family={SERIF} fill="var(--muted)">your eye goes here</text>
+    <text x="52" y="206" font-size="13" font-style="italic" font-family={SERIF} fill="var(--muted)">you looked here first</text>
     <path d="M180,198 C205,180 215,160 226,140" fill="none" stroke="var(--faint)" stroke-width="1.25" />
   </svg>
 )}
