@@ -105,5 +105,12 @@ const fmt = (d: string) =>
 
     document.addEventListener("astro:page-load", setupFilters);
     setupFilters();
+
+    // Freeze the diagram's traveling dot for reduced-motion users.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document
+        .querySelectorAll(".inspo-diagram svg")
+        .forEach((svg) => svg.pauseAnimations());
+    }
   </script>
 </Base>

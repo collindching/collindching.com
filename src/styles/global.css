@@ -456,7 +456,8 @@ a:hover {
 
 .inspo-diagram figcaption {
   margin-top: var(--space-2);
-  font-size: 0.8125rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.9375rem;
   font-style: italic;
   color: var(--faint);
   text-align: center;
