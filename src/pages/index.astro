@@ -1,10 +1,15 @@
 ---
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
+import { readingList } from "../data/reading";
 import { SITE_DESCRIPTION } from "../consts";
 
 const posts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const reads = [...readingList]
+  .sort((a, b) => b.added.localeCompare(a.added))
   .slice(0, 3);
 
 const fmt = (d: Date) =>
@@ -15,17 +20,65 @@ const fmt = (d: Date) =>
   });
 ---
 
+<style>
+  .statement {
+    margin: var(--space-6) 0 var(--space-2);
+    max-width: 40rem;
+  }
+  .statement h1 {
+    font-size: clamp(1.65rem, 4vw, 2.4rem);
+    margin: 0 0 var(--space-2);
+  }
+  .statement p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: var(--faint);
+    margin-bottom: var(--space-2);
+  }
+  .featured {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+    padding: var(--space-3) var(--space-4);
+    margin: var(--space-5) 0;
+  }
+  .featured .kicker {
+    color: var(--accent);
+  }
+  .featured p {
+    margin-bottom: var(--space-2);
+  }
+  .featured p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+
 <Base description={SITE_DESCRIPTION}>
-  <h1>The build log of a data scientist becoming an agent engineer.</h1>
-  <p class="lede">
-    I'm Collin D. Ching. I have three goals — learn AI, build and ship with AI, and
-    learn marketing — and this site is the one vehicle for all of them. Every
-    week I learn something real, build it into this site, and write up what
-    happened.
-  </p>
+  <div class="statement">
+    <h1>A data scientist learning entrepreneurship with AI.</h1>
+    <p>
+      The proof is the work. Every week: read something real, write it up,
+      build it into this site.
+    </p>
+  </div>
+
+  <div class="featured">
+    <p class="kicker">THIS WEEK</p>
+    <p>
+      <strong>The first public teardown.</strong> A landing page dissected
+      surgeon-style — the leak, the ranked fixes, one stealable principle.
+      Shipping Monday.
+    </p>
+    <p><a href="/projects">All projects →</a></p>
+  </div>
 
   <div class="section-head">
-    <h2>Latest writing</h2>
+    <h2>Writing</h2>
     <a href="/writing">All posts →</a>
   </div>
   <ul class="post-list">
@@ -43,13 +96,22 @@ const fmt = (d: Date) =>
   </ul>
 
   <div class="section-head">
-    <h2>Now building</h2>
-    <a href="/projects">All projects →</a>
+    <h2>Reading</h2>
+    <a href="/reading">All reading →</a>
   </div>
-  <p>
-    <strong>This website.</strong> Hand-built with Astro, no site builder, no
-    framework bloat — because the build <em>is</em> the learning. Next up:
-    evaluating agent frameworks on a toy task and publishing the scorecard.
-  </p>
-  <p><a href="/about">More about me →</a></p>
+  <ul class="post-list">
+    {
+      reads.map((item) => (
+        <li class="reveal">
+          <a class="post-title" href={item.url}>
+            {item.title}
+          </a>
+          <p class="post-meta">
+            {item.author} · {item.kind} · added {item.added}
+          </p>
+          <p class="post-desc">{item.note}</p>
+        </li>
+      ))
+    }
+  </ul>
 </Base>
