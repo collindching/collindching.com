@@ -53,7 +53,7 @@ export const inspiration: InspirationItem[] = [
     title: "Qoves",
     url: "https://www.instagram.com/qoves/",
     category: "content",
-    note: "Facial aesthetics decoded with measurements, simulations, and cited studies — 1.19M followers. The engine: infinite subjects, one fixed lens, every post a reveal. And the bio is the business model: “Get Your Personalised Facial Analysis” is teardown → consulting in another domain. The steal: the format discipline.",
+    note: "Facial aesthetics decoded with measurements, simulations, and cited studies — 1.19M followers. The engine: infinite subjects, one fixed lens, every post a reveal. And the bio is the business model: “Get Your Personalised Facial Analysis” is teardown → consulting in another domain. The steal: the format discipline. Fuel note: the subject is you — that’s half the engine. 3Blue1Brown runs the same engine on curiosity; it works, but weaker.",
     added: "2026-09-25",
     diagramId: "qoves",
     diagramCaption: "The reveal engine",
