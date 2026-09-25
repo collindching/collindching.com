@@ -49,4 +49,13 @@ export const inspiration: InspirationItem[] = [
     diagramId: "brainrotco",
     diagramCaption: "Movement is a spotlight",
   },
+  {
+    title: "Qoves",
+    url: "https://www.instagram.com/qoves/",
+    category: "content",
+    note: "Facial aesthetics decoded with measurements, simulations, and cited studies — 1.19M followers. The engine: infinite subjects, one fixed lens, every post a reveal. And the bio is the business model: “Get Your Personalised Facial Analysis” is teardown → consulting in another domain. The steal: the format discipline.",
+    added: "2026-09-25",
+    diagramId: "qoves",
+    diagramCaption: "The reveal engine",
+  },
 ];

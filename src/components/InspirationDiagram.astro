@@ -100,3 +100,43 @@ const SERIF = "Georgia, 'Times New Roman', serif";
     <path d="M180,198 C205,180 215,160 226,140" fill="none" stroke="var(--faint)" stroke-width="1.25" />
   </svg>
 )}
+
+{id === "qoves" && (
+  <svg viewBox="0 0 380 240" role="img" aria-label="Diagram: many faint faces pass through one measuring lens and emerge as a single annotated reveal">
+    <defs>
+      <marker id="arr-brown-3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
+      </marker>
+    </defs>
+
+    <text x="20" y="28" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">INFINITE SUBJECTS</text>
+    <g fill="none" stroke="var(--faint)" stroke-width="1.5" opacity="0.5">
+      <ellipse cx="48" cy="96" rx="20" ry="28" />
+      <ellipse cx="106" cy="93" rx="24" ry="31" />
+      <ellipse cx="162" cy="97" rx="19" ry="27" />
+    </g>
+
+    <text x="192" y="70" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">ONE LENS</text>
+    <line x1="196" y1="95" x2="226" y2="95" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr-brown-3)" />
+
+    <text x="252" y="28" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">THE REVEAL</text>
+    <ellipse cx="304" cy="95" rx="26" ry="34" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <g stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round">
+      <line x1="278" y1="86" x2="330" y2="86" />
+      <line x1="278" y1="82" x2="278" y2="90" />
+      <line x1="330" y1="82" x2="330" y2="90" />
+      <line x1="342" y1="61" x2="342" y2="129" />
+      <line x1="338" y1="61" x2="346" y2="61" />
+      <line x1="338" y1="129" x2="346" y2="129" />
+      <line x1="339" y1="84" x2="345" y2="84" opacity="0.7" />
+      <line x1="339" y1="106" x2="345" y2="106" opacity="0.7" />
+    </g>
+    <text x="304" y="150" text-anchor="middle" font-size="10.5" font-style="italic" font-family={SERIF} fill="var(--accent)">1 : 1.618</text>
+
+    <text x="252" y="172" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--ink)">the hidden ratio,</text>
+    <text x="252" y="190" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--ink)">made visible.</text>
+
+    <text x="20" y="212" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">THE LADDER</text>
+    <text x="20" y="230" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--muted)">every reveal sells <tspan fill="var(--accent)">your personal analysis</tspan></text>
+  </svg>
+)}
