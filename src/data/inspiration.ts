@@ -58,4 +58,13 @@ export const inspiration: InspirationItem[] = [
     diagramId: "qoves",
     diagramCaption: "The reveal engine",
   },
+  {
+    title: "createwithalena",
+    url: "https://www.instagram.com/createwithalena/",
+    category: "design",
+    note: "Alena's design-tip reels (459K followers, 192K likes on the one I saved): four before/afters per video — fix the layout, exaggerate the scale, detail the plain parts, force the contrast. Same engine as Qoves: infinite subjects, one fixed lens, every post a transformation — and the bio is the business model again (freelance designer, hire link up top). The steal: boring is everything at the same volume. One brave choice per view.",
+    added: "2026-09-25",
+    diagramId: "alena",
+    diagramCaption: "Small tweaks, huge difference",
+  },
 ];

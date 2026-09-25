@@ -142,3 +142,39 @@ const SERIF = "Georgia, 'Times New Roman', serif";
     <text x="20" y="266" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">your face pulls harder than 3Blue1Brown’s math.</text>
   </svg>
 )}
+
+{id === "alena" && (
+  <svg viewBox="0 0 380 244" role="img" aria-label="Diagram: five identical gray squares pass through a critique and emerge as four quiet squares and one large brown square">
+    <defs>
+      <marker id="arr-brown-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)" />
+      </marker>
+    </defs>
+
+    <text x="20" y="26" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">BEFORE</text>
+    <g fill="var(--faint)" opacity="0.45">
+      <rect x="20" y="44" width="36" height="36" rx="6" />
+      <rect x="68" y="44" width="36" height="36" rx="6" />
+      <rect x="116" y="44" width="36" height="36" rx="6" />
+      <rect x="164" y="44" width="36" height="36" rx="6" />
+      <rect x="212" y="44" width="36" height="36" rx="6" />
+    </g>
+    <text x="268" y="66" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">everything at</text>
+    <text x="268" y="82" font-size="11" font-style="italic" font-family={SERIF} fill="var(--faint)">the same volume</text>
+
+    <line x1="130" y1="96" x2="130" y2="120" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr-brown-4)" />
+
+    <text x="20" y="144" font-size="9.5" letter-spacing="0.14em" fill="var(--faint)">AFTER</text>
+    <g fill="var(--faint)" opacity="0.45">
+      <rect x="20" y="160" width="36" height="36" rx="6" />
+      <rect x="68" y="160" width="36" height="36" rx="6" />
+      <rect x="164" y="160" width="36" height="36" rx="6" />
+      <rect x="212" y="160" width="36" height="36" rx="6" />
+    </g>
+    <rect x="106" y="148" width="60" height="60" rx="8" fill="var(--accent)" />
+    <text x="268" y="182" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--accent)">one brave choice</text>
+    <path d="M262,176 C240,172 220,172 200,176" fill="none" stroke="var(--faint)" stroke-width="1.25" />
+
+    <text x="20" y="232" font-size="12.5" font-style="italic" font-family={SERIF} fill="var(--muted)">boring is everything at the same volume.</text>
+  </svg>
+)}
