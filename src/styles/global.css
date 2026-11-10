@@ -355,6 +355,16 @@ a:hover {
   transform: scaleX(1);
 }
 
+/* ---- first 100 ---- */
+
+.case-lesson {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+  font-style: italic;
+}
+
 /* ---- inspiration ---- */
 
 .filter-bar {

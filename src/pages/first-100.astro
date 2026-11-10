@@ -1,0 +1,42 @@
+---
+import Base from "../layouts/Base.astro";
+import { caseStudies } from "../data/case-studies";
+
+const items = [...caseStudies].sort((a, b) => b.studied.localeCompare(a.studied));
+---
+
+<Base
+  title="First 100"
+  description="How startups got their first 100 customers — the first customers, not the funding story."
+>
+  <h1>First 100</h1>
+  <p class="lede">
+    How startups got their first 100 customers. Not the funding story — the
+    first customers: who they were, how the founder found them, what they
+    paid, and what the founder learned from them.
+  </p>
+  <div class="inspo-list">
+    {
+      items.map((item) => (
+        <article class="inspo-entry reveal">
+          <p class="inspo-kicker">
+            <span class="inspo-cat">First 100</span> · studied {item.studied}
+          </p>
+          <h2 class="inspo-title">
+            {item.url ? <a href={item.url}>{item.company}</a> : item.company}
+          </h2>
+          <p class="inspo-note">{item.tagline}</p>
+          {item.story.map((para) => (
+            <p>{para}</p>
+          ))}
+          <p class="case-lesson">Lesson: {item.lesson}</p>
+          {item.caveat && <p class="inspo-meta">{item.caveat}</p>}
+        </article>
+      ))
+    }
+  </div>
+  <p class="inspo-foot">
+    New studies get added as they're researched — whichever company catches my
+    eye next.
+  </p>
+</Base>
